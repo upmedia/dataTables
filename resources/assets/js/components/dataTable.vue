@@ -10,8 +10,15 @@
                     <input type="text" class="form-control" id="id" v-model="quickSearchQuery">
                 </div>
                 <div class="form-group col-md-2">
-
+                    <label for="limit">Display records</label>
+                    <select id="limit" class="form-control" v-model="limit" @change="getRecords">
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="1000">1000</option>
+                        <option value="">All</option>
+                    </select>
                 </div>
+
             </div>
 
             <div class="table-responsive">
@@ -43,6 +50,8 @@
 </template>
 
 <script>
+    import queryString from 'query-string'
+
     export default {
         props: [
             'endpoint'
@@ -59,6 +68,7 @@
                     key: 'id',
                     order: 'asc'
                 },
+                limit: 50,
                 quickSearchQuery: ''
             }
         },
@@ -95,8 +105,13 @@
 
         methods: {
             getRecords () {
-                return axios.get(`${this.endpoint}`).then((response) => {
+                return axios.get(`${this.endpoint}?${this.getQueryParameters()}`).then((response) => {
                     this.response = response.data.data
+                })
+            },
+            getQueryParameters() {
+                return queryString.stringify({
+                    limit: this.limit
                 })
             },
             sortBy (column) {
