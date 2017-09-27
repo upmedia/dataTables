@@ -18,7 +18,6 @@
                         <option value="">All</option>
                     </select>
                 </div>
-
             </div>
 
             <div class="table-responsive">
@@ -38,8 +37,26 @@
                 </thead>
                 <tbody>
                     <tr v-for="record in filteredRecords" :key="record.id">
-                        <td v-for="columnValue, column in record" v-text="columnValue"></td>
-                        <td></td>
+                        <td v-for="columnValue, column in record">
+                            <template v-if="editing.id === record.id && isUpdatable(column)">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" :value="columnValue" v-model="editing.form[column]">
+                                </div>
+                            </template>
+                            <template v-else>
+                                {{ columnValue }}
+                            </template>
+                        </td>
+                        <td>
+                            <template v-if="editing.id !== record.id">
+                                <a href="#" @click.prevent="edit(record)" >Edit</a>
+                            </template>
+                            <template v-if="editing.id === record.id">
+                                <a href="#" @click.prevent="update" >Save</a><br>
+                                <a href="#" @click.prevent="editing.id = null">Cancel</a>
+                            </template>
+
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -62,6 +79,7 @@
                 response: {
                     table: '',
                     displayable: [],
+                    updateable: [],
                     records: []
                 },
                 sort: {
@@ -69,7 +87,12 @@
                     order: 'asc'
                 },
                 limit: 50,
-                quickSearchQuery: ''
+                quickSearchQuery: '',
+                editing: {
+                    id: null,
+                    form: {},
+                    errors: []
+                }
             }
         },
 
@@ -104,7 +127,7 @@
         },
 
         methods: {
-            getRecords () {
+            getRecords() {
                 return axios.get(`${this.endpoint}?${this.getQueryParameters()}`).then((response) => {
                     this.response = response.data.data
                 })
@@ -114,9 +137,20 @@
                     limit: this.limit
                 })
             },
-            sortBy (column) {
+            sortBy(column) {
                 this.sort.key = column;
                 this.sort.order = this.sort.order == 'asc' ? 'desc' : 'asc'
+            },
+            edit(record) {
+                this.editing.errors = []
+                this.editing.id = record.id
+                this.editing.form = _.pick(record, this.response.updateable)
+            },
+            isUpdatable(column) {
+                return this.response.updateable.includes(column)
+            },
+            update() {
+                console.log(this.editing.form)
             }
         }
     }

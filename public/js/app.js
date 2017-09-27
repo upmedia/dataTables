@@ -42470,6 +42470,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -42481,6 +42498,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             response: {
                 table: '',
                 displayable: [],
+                updateable: [],
                 records: []
             },
             sort: {
@@ -42488,7 +42506,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 order: 'asc'
             },
             limit: 50,
-            quickSearchQuery: ''
+            quickSearchQuery: '',
+            editing: {
+                id: null,
+                form: {},
+                errors: []
+            }
         };
     },
     mounted: function mounted() {
@@ -42540,6 +42563,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         sortBy: function sortBy(column) {
             this.sort.key = column;
             this.sort.order = this.sort.order == 'asc' ? 'desc' : 'asc';
+        },
+        edit: function edit(record) {
+            this.editing.errors = [];
+            this.editing.id = record.id;
+            this.editing.form = _.pick(record, this.response.updateable);
+        },
+        isUpdatable: function isUpdatable(column) {
+            return this.response.updateable.includes(column);
+        },
+        update: function update() {
+            console.log(this.editing.form);
         }
     }
 });
@@ -42682,12 +42716,110 @@ var render = function() {
                 { key: record.id },
                 [
                   _vm._l(record, function(columnValue, column) {
-                    return _c("td", {
-                      domProps: { textContent: _vm._s(columnValue) }
-                    })
+                    return _c(
+                      "td",
+                      [
+                        _vm.editing.id === record.id && _vm.isUpdatable(column)
+                          ? [
+                              _c("div", { staticClass: "form-group" }, [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.editing.form[column],
+                                      expression: "editing.form[column]"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: { type: "text" },
+                                  domProps: {
+                                    value: columnValue,
+                                    value: _vm.editing.form[column]
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.editing.form,
+                                        column,
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ])
+                            ]
+                          : [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(columnValue) +
+                                  "\n                        "
+                              )
+                            ]
+                      ],
+                      2
+                    )
                   }),
                   _vm._v(" "),
-                  _c("td")
+                  _c(
+                    "td",
+                    [
+                      _vm.editing.id !== record.id
+                        ? [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.edit(record)
+                                  }
+                                }
+                              },
+                              [_vm._v("Edit")]
+                            )
+                          ]
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.editing.id === record.id
+                        ? [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.update($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("Save")]
+                            ),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.editing.id = null
+                                  }
+                                }
+                              },
+                              [_vm._v("Cancel")]
+                            )
+                          ]
+                        : _vm._e()
+                    ],
+                    2
+                  )
                 ],
                 2
               )
