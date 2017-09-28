@@ -41973,7 +41973,7 @@ exports = module.exports = __webpack_require__(39)(undefined);
 
 
 // module
-exports.push([module.i, "\n.sortable {\n  cursor: pointer;\n}\n.arrow {\n  display: inline-block;\n  vertical-align: middle;\n  width: 0;\n  height: 0;\n  margin-left: 5px;\n  opacity: .6;\n}\n.arrow--asc {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-bottom: 4px solid #222;\n}\n.arrow--desc {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-top: 4px solid #222;\n}\n", ""]);
+exports.push([module.i, "\n.sortable {\n  cursor: pointer;\n}\n.arrow {\n  display: inline-block;\n  vertical-align: middle;\n  width: 0;\n  height: 0;\n  margin-left: 5px;\n  opacity: .6;\n}\n.arrow--asc {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-bottom: 4px solid #222;\n}\n.arrow--desc {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-top: 4px solid #222;\n}\n.form-control-clear {\n  z-index: 10;\n  pointer-events: auto;\n  cursor: pointer;\n  margin-right: 16px;\n}\n", ""]);
 
 // exports
 
@@ -42516,7 +42516,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
 
 
 
@@ -42618,6 +42617,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }).catch(function (error) {
                 _this3.editing.errors = error.response.data.errors;
             });
+        },
+        clearQuickSearch: function clearQuickSearch() {
+            this.quickSearchQuery = '';
         }
     }
 });
@@ -43178,10 +43180,6 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "form-group col-md-10" }, [
-          _c("label", { attrs: { for: "filter" } }, [
-            _vm._v("Quick search current result")
-          ]),
-          _vm._v(" "),
           _c("input", {
             directives: [
               {
@@ -43192,7 +43190,11 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
-            attrs: { type: "text", id: "id" },
+            attrs: {
+              type: "search",
+              id: "id",
+              placeholder: "Quick search current result"
+            },
             domProps: { value: _vm.quickSearchQuery },
             on: {
               input: function($event) {
@@ -43202,12 +43204,21 @@ var render = function() {
                 _vm.quickSearchQuery = $event.target.value
               }
             }
+          }),
+          _vm._v(" "),
+          _c("span", {
+            staticClass:
+              "form-control-clear glyphicon glyphicon-remove form-control-feedback",
+            class: { hidden: _vm.quickSearchQuery === "" },
+            on: {
+              click: function($event) {
+                _vm.quickSearchQuery = ""
+              }
+            }
           })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-md-2" }, [
-          _c("label", { attrs: { for: "limit" } }, [_vm._v("Display records")]),
-          _vm._v(" "),
           _c(
             "select",
             {

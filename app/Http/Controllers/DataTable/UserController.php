@@ -8,6 +8,13 @@ use App\Http\Controllers\DataTable\DataTableController;
 
 class UserController extends DataTableController
 {
+
+    public function __construct()
+    {
+        Parent::__construct();
+        $this->middleware('auth');
+    }
+
     public function builder()
     {
     	return User::query();
@@ -15,9 +22,11 @@ class UserController extends DataTableController
 
     public function update($id, Request $request)
     {
+        $user = User::find($id);
+
     	$this->validate($request, [
     		'name' => 'required',
-    		'email' => 'required|email|unique:users,email',
+    		'email' => 'required|email|unique:users,email,' . $user->id,
     	]);
 
     	$this->builder->find($id)->update($request->only($this->getUpdatableColumns()));

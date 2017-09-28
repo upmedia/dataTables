@@ -29,11 +29,10 @@
 
             <div class="row">
                 <div class="form-group col-md-10">
-                    <label for="filter">Quick search current result</label>
-                    <input type="text" class="form-control" id="id" v-model="quickSearchQuery">
+                        <input type="search" class="form-control" id="id" v-model="quickSearchQuery" placeholder="Quick search current result">
+                        <span class="form-control-clear glyphicon glyphicon-remove form-control-feedback" :class="{ 'hidden': quickSearchQuery === ''}" @click="quickSearchQuery = ''"></span>
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="limit">Display records</label>
                     <select id="limit" class="form-control" v-model="limit" @change="getRecords">
                         <option value="50">50</option>
                         <option value="100">100</option>
@@ -192,6 +191,9 @@
                 }).catch((error) => {
                     this.editing.errors = error.response.data.errors
                 })
+            },
+            clearQuickSearch() {
+                this.quickSearchQuery = '';
             }
         }
     }
@@ -221,5 +223,12 @@
             border-right: 4px solid transparent;
             border-top: 4px solid #222;
         }
+    }
+
+    .form-control-clear {
+      z-index: 10;
+      pointer-events: auto;
+      cursor: pointer;
+      margin-right: 16px;
     }
 </style>
