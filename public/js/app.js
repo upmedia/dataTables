@@ -42516,6 +42516,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -43143,7 +43148,29 @@ var render = function() {
                     }
                   }
                 },
-                [_c("option", { attrs: { value: "equals" } }, [_vm._v("=")])]
+                [
+                  _c("option", { attrs: { value: "equals" } }, [_vm._v("=")]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "contains" } }, [
+                    _vm._v("Contains")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "starts_with" } }, [
+                    _vm._v("Starts with")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "end_with" } }, [
+                    _vm._v("Ends with")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "greater_than" } }, [
+                    _vm._v("Greater than")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "less_than" } }, [
+                    _vm._v("Less than")
+                  ])
+                ]
               )
             ]),
             _vm._v(" "),
