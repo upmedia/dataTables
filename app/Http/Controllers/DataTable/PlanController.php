@@ -20,4 +20,23 @@ class PlanController extends DataTableController
         ];
     }
 
+    /**
+     * Create a new plan record
+     * @param  Request $request
+     * @return void
+     */
+    public function store(Request $request)
+    {
+        if (!$this->allowCreation) {
+            return;
+        }
+
+        $this->validate($request, [
+            'braintree_id' => 'required',
+            'price' => 'required',
+        ]);
+
+        $this->builder->create($request->only($this->getUpdatableColumns()));
+    }
+
 }
