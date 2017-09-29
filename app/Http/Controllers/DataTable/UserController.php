@@ -8,6 +8,7 @@ use App\Http\Controllers\DataTable\DataTableController;
 
 class UserController extends DataTableController
 {
+    protected $allowCreation = false;
 
     public function __construct()
     {

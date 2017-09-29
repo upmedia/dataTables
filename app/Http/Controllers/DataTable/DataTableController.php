@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class DataTableController extends Controller
 {
+    protected $allowCreation = true;
+
 	protected $builder;
 
     abstract public function builder();
@@ -33,6 +35,9 @@ abstract class DataTableController extends Controller
     			'displayable' => array_values($this->getDisplayableColumns()),
     			'updateable' => array_values($this->getUpdatableColumns()),
     			'records' => $this->getRecords($request),
+                'allow' => [
+                    'creation' => $this->allowCreation,
+                ],
     		]
     	]);
 

@@ -42521,6 +42521,28 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -42533,7 +42555,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 table: '',
                 displayable: [],
                 updateable: [],
-                records: []
+                records: [],
+                allow: {}
             },
             sort: {
                 key: 'id',
@@ -42550,6 +42573,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 value: '',
                 operator: 'equals',
                 column: 'id'
+            },
+            creating: {
+                active: false,
+                form: {},
+                errors: []
             }
         };
     },
@@ -42623,8 +42651,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 _this3.editing.errors = error.response.data.errors;
             });
         },
-        clearQuickSearch: function clearQuickSearch() {
-            this.quickSearchQuery = '';
+        store: function store() {
+            console.log(this.creating.form);
         }
     }
 });
@@ -43063,10 +43091,95 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "panel panel-default" }, [
     _c("div", { staticClass: "panel-heading" }, [
-      _vm._v(_vm._s(_vm.response.table))
+      _vm._v("\n        " + _vm._s(_vm.response.table) + "\n        "),
+      _vm.response.allow.creation
+        ? _c(
+            "a",
+            {
+              staticClass: "pull-right",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.creating.active = !_vm.creating.active
+                }
+              }
+            },
+            [
+              _vm._v(
+                "\n            " +
+                  _vm._s(_vm.creating.active ? "Cancel" : "Add record") +
+                  "\n        "
+              )
+            ]
+          )
+        : _vm._e()
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "panel-body" }, [
+      _vm.creating.active
+        ? _c("div", { staticClass: "well" }, [
+            _c(
+              "form",
+              {
+                staticClass: "form-horizontal",
+                attrs: { action: "#" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    _vm.store($event)
+                  }
+                }
+              },
+              [
+                _vm._l(_vm.response.updateable, function(column) {
+                  return _c("div", { staticClass: "form-group" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-3 control-label",
+                        attrs: { for: column }
+                      },
+                      [_vm._v(_vm._s(column))]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.creating.form[column],
+                            expression: "creating.form[column]"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", id: column },
+                        domProps: { value: _vm.creating.form[column] },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.creating.form,
+                              column,
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                }),
+                _vm._v(" "),
+                _vm._m(0)
+              ],
+              2
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c(
         "form",
         {
@@ -43159,7 +43272,7 @@ var render = function() {
                     _vm._v("Starts with")
                   ]),
                   _vm._v(" "),
-                  _c("option", { attrs: { value: "end_with" } }, [
+                  _c("option", { attrs: { value: "ends_with" } }, [
                     _vm._v("Ends with")
                   ]),
                   _vm._v(" "),
@@ -43198,7 +43311,7 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _vm._m(0)
+                _vm._m(1)
               ])
             ])
           ])
@@ -43480,6 +43593,20 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-default", attrs: { type: "submit" } },
+          [_vm._v("Create")]
+        )
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
