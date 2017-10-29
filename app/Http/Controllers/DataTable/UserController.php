@@ -10,6 +10,8 @@ class UserController extends DataTableController
 {
     protected $allowCreation = false;
 
+    protected $allowDeletion = true;
+
     public function __construct()
     {
         Parent::__construct();

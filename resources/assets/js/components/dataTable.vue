@@ -115,7 +115,7 @@
                                 <a href="#" @click.prevent="editing.id = null">Cancel</a>
                             </template>
                         </td>
-                        <td>
+                        <td v-if="response.allow.deletion">
                             <a href="#" @click.prevent="destroy(record.id)">Delete</a>
                         </td>
                     </tr>
