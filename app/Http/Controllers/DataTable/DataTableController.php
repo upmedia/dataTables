@@ -44,17 +44,6 @@ abstract class DataTableController extends Controller
     }
 
     /**
-     * [update description]
-     * @param  mixed   $id
-     * @param  Request $request
-     * @return void
-     */
-    public function update($id, Request $request)
-    {
-    	$this->builder->find($id)->update($request->only($this->getUpdatableColumns()));
-    }
-
-    /**
      * Create a new record
      * @param  Request $request
      * @return void
@@ -66,6 +55,10 @@ abstract class DataTableController extends Controller
         }
 
         $this->builder->create($request->only($this->getUpdatableColumns()));
+    }
+
+    public function destroy($id, Request $request) {
+        $this->builder->find($id)->delete();
     }
 
     public function getDisplayableColumns()

@@ -23,7 +23,7 @@ class UserController extends DataTableController
 
     public function update($id, Request $request)
     {
-        $user = User::find($id);
+		$user = User::find($id);
 
     	$this->validate($request, [
     		'name' => 'required',
