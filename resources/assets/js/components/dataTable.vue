@@ -111,10 +111,12 @@
                                 <a href="#" @click.prevent="edit(record)" >Edit</a>
                             </template>
                             <template v-if="editing.id === record.id">
-                                <a href="#" @click.prevent="update" >Save</a><br>
+                                <a href="#" @click.prevent="store" >Save</a><br>
                                 <a href="#" @click.prevent="editing.id = null">Cancel</a>
                             </template>
-
+                        </td>
+                        <td v-if="response.allow.deletion">
+                            <a href="#" @click.prevent="destroy(record.id)">Delete</a>
                         </td>
                     </tr>
                 </tbody>
@@ -220,7 +222,7 @@
             isUpdatable(column) {
                 return this.response.updateable.includes(column)
             },
-            update() {
+            store() {
                 axios.patch(`${this.endpoint}/${this.editing.id}`, this.editing.form).then(() => {
                     this.getRecords().then(() => {
                         this.editing.id = null
@@ -243,6 +245,15 @@
                     if (error.response.status === 422) {
                         this.creating.errors = error.response.data.errors
                     }
+                })
+            },
+            destroy(record) {
+                if(!window.confirm('Are you sure?')) {
+                    return
+                }
+
+                axios.delete(`${this.endpoint}/${record}`).then(() => {
+                    this.getRecords()
                 })
             }
         }

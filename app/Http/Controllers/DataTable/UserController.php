@@ -10,6 +10,8 @@ class UserController extends DataTableController
 {
     protected $allowCreation = false;
 
+    protected $allowDeletion = true;
+
     public function __construct()
     {
         Parent::__construct();
@@ -23,7 +25,7 @@ class UserController extends DataTableController
 
     public function update($id, Request $request)
     {
-        $user = User::find($id);
+		$user = User::find($id);
 
     	$this->validate($request, [
     		'name' => 'required',

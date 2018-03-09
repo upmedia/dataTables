@@ -9,7 +9,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class DataTableController extends Controller
 {
+   /**
+    * If an entity is allowed to be created.
+    * @var boolean
+    */
     protected $allowCreation = true;
+
+    /**
+     * If entity is allowed to be deleted.
+     * @var boolean
+     */
+    protected $allowDeletion = true;
 
 	protected $builder;
 
@@ -37,21 +47,11 @@ abstract class DataTableController extends Controller
     			'records' => $this->getRecords($request),
                 'allow' => [
                     'creation' => $this->allowCreation,
+                    'deletion' => $this->allowDeletion,
                 ],
     		]
     	]);
 
-    }
-
-    /**
-     * [update description]
-     * @param  mixed   $id
-     * @param  Request $request
-     * @return void
-     */
-    public function update($id, Request $request)
-    {
-    	$this->builder->find($id)->update($request->only($this->getUpdatableColumns()));
     }
 
     /**
@@ -66,6 +66,14 @@ abstract class DataTableController extends Controller
         }
 
         $this->builder->create($request->only($this->getUpdatableColumns()));
+    }
+
+    public function destroy($id, Request $request) {
+        if (!$this->allowDeletion) {
+            return;
+        }
+
+        $this->builder->find($id)->delete();
     }
 
     public function getDisplayableColumns()
